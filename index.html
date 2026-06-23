@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数智AI工具合集</title>
+  <meta name="description" content="数智AI工具合集，精选133+热门AI工具，覆盖AI通用模型、AI绘画、AI视频、AI音频、AI数字人等分类" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>" />
+  <style>
+    /* ============ CSS Reset & Variables ============ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #3a8ee6;
+      --primary-light: #5ba8f5;
+      --primary-dark: #2271c7;
+      --accent: #60c3f5;
+      --bg: #f0f6ff;
+      --card-bg: #ffffff;
+      --nav-bg: #ffffff;
+      --text: #1e2d40;
+      --text-muted: #8899aa;
+      --border: #d6e8f8;
+      --shadow: 0 2px 12px rgba(58,142,230,0.08);
+      --shadow-hover: 0 8px 32px rgba(58,142,230,0.18);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --tag-bg: linear-gradient(135deg, #3a8ee6, #60c3f5);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ============ Navbar ============ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--tag-bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--tag-bg);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 0 16px 0 42px;
+      font-size: 14px;
+      outline: none;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+    }
+
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .search-wrap .clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    /* ============ Banner ============ */
+    .banner {
+      background: linear-gradient(135deg, #3a8ee6 0%, #2271c7 50%, #60c3f5 100%);
+      color: white;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .banner h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .banner p {
+      font-size: 15px;
+      opacity: 0.88;
+    }
+
+    /* ============ Main Layout ============ */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .main-layout {
+      display: flex;
+      gap: 24px;
+      padding: 24px 16px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ============ Sidebar (分类导航) ============ */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px 8px;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 4px 12px 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--text);
+      transition: all 0.18s;
+      cursor: pointer;
+    }
+
+    .sidebar-nav a:hover {
+      background: rgba(108,99,255,0.08);
+      color: var(--primary);
+    }
+
+    .sidebar-nav a.active {
+      background: rgba(108,99,255,0.12);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav .count {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ============ Content Area ============ */
+    .content { flex: 1; min-width: 0; }
+
+    /* ============ 置顶推荐 ============ */
+    .featured-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .featured-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(108,99,255,0.06), transparent);
+    }
+
+    .featured-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .featured-title .star { color: #f5a623; font-size: 18px; }
+
+    .toggle-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+
+    .featured-grid.collapsed { display: none; }
+
+    /* ============ Category Section ============ */
+    .category-section {
+      margin-bottom: 32px;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .category-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .category-count {
+      background: rgba(108,99,255,0.1);
+      color: var(--primary);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ============ Tool Grid ============ */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    /* ============ Tool Card ============ */
+    .tool-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      position: relative;
+      transition: all 0.22s;
+      cursor: pointer;
+    }
+
+    .tool-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+    }
+
+    .rec-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--tag-bg);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .tool-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: var(--bg);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .tool-icon-placeholder {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6c63ff22, #ff658422);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .tool-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .tool-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .visit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      background: rgba(108,99,255,0.08);
+      color: var(--primary);
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+
+    .visit-btn:hover { background: rgba(108,99,255,0.18); }
+
+    /* ============ Search Results ============ */
+    .search-results { margin-bottom: 32px; }
+    .search-results-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+    }
+    .search-results-title span { color: var(--primary); }
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* ============ Footer ============ */
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: color 0.18s;
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    /* ============ Responsive ============ */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main-layout { padding: 16px 12px; }
+    }
+
+    @media (max-width: 600px) {
+      .navbar { padding: 0 12px; }
+      .logo-text { display: none; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-grid { grid-template-columns: repeat(1, 1fr); }
+      .banner h1 { font-size: 22px; }
+    }
+
+    /* ============ Scroll Highlight ============ */
+    .highlight-flash {
+      animation: flashHighlight 1.2s ease;
+    }
+
+    @keyframes flashHighlight {
+      0%   { box-shadow: 0 0 0 0 rgba(108,99,255,0.5); }
+      40%  { box-shadow: 0 0 0 8px rgba(108,99,255,0.2); }
+      100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== Navbar ====== -->
+<nav class="navbar">
+  <div class="logo">
+    <div class="logo-icon">🤖</div>
+    <span class="logo-text">数智AI工具合集</span>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索AI工具..." autocomplete="off" />
+    <button class="clear-btn" id="clearBtn">✕</button>
+  </div>
+</nav>
+
+<!-- ====== Banner ====== -->
+<div class="banner">
+  <h1>🚀 数智AI工具合集</h1>
+  <p>涵盖133+热门AI工具，助你高效探索AI世界</p>
+</div>
+
+<!-- ====== Main ====== -->
+<div class="main-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">分类导航</div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="content" id="mainContent">
+
+    <!-- 置顶推荐 -->
+    <div class="featured-section">
+      <div class="featured-header">
+        <div class="featured-title">
+          <span class="star">⭐</span> 编辑精选推荐
+        </div>
+        <button class="toggle-btn" id="featuredToggle">收起</button>
+      </div>
+      <div class="featured-grid" id="featuredGrid"></div>
+    </div>
+
+    <!-- 搜索结果区 -->
+    <div class="search-results" id="searchResults" style="display:none;"></div>
+
+    <!-- 工具分类列表 -->
+    <div id="categoriesContainer"></div>
+
+  </main>
+</div>
+
+<!-- ====== Footer ====== -->
+<footer>
+  <div class="footer-logo">
+    <span style="font-size:22px;">🤖</span>
+    <span style="font-weight:700;font-size:16px;">数智AI工具合集</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">关于我们</a>
+    <a href="#">提交工具</a>
+    <a href="#">反馈问题</a>
+  </div>
+  <div class="footer-copy">© 2026 数智AI工具合集. All rights reserved. Made with ❤️</div>
+</footer>
+
+<script>
+// ====================================================
+//  数据：所有工具分类和工具信息
+// ====================================================
+const FEATURED = [
+  {
+    name: "MX绘画中文站",
+    desc: "集成国内外所有AI绘画/视频模型",
+    icon: "https://aigcmax.com/uploads/icons/www.mxai.cn.png",
+    url: "https://www.mxai.cn/home/#/mj",
+    rec: true
+  },
+  {
+    name: "扣子",
+    desc: "字节旗下通用智能体平台",
+    icon: "https://aigcmax.com/uploads/icons/upload_1771351524512.png",
+    url: "https://coze.cn/",
+    rec: true
+  },
+  {
+    name: "一键下载视频",
+    desc: "下载抖音、视频号等平台高清视频",
+    icon: "https://aigcmax.com/uploads/icons/xiazaishipin.com.ico",
+    url: "http://xiazaishipin.com/",
+    rec: true
+  }
+];
+
+const CATEGORIES = [
+  {
+    id: "ai-model",
+    icon: "🤖",
+    name: "AI 通用模型",
+    tools: [
+      { name:"DeepSeek",     desc:"国产最强的深度思考大模型",     icon:"https://aigcmax.com/uploads/icons/chat.deepseek.com.png",          url:"https://chat.deepseek.com/" },
+      { name:"Kimi",         desc:"长文本和深度思考AI大模型",     icon:"https://aigcmax.com/uploads/icons/upload_1771351494254.png",        url:"https://www.kimi.com/" },
+      { name:"豆包",          desc:"字节推出的AI全能助手",         icon:"https://aigcmax.com/uploads/icons/upload_1771383463635.webp",       url:"https://www.doubao.com/chat/" },
+      { name:"腾讯元宝",      desc:"腾讯推出的AI全能助手",         icon:"https://aigcmax.com/uploads/icons/upload_1771383590319.webp",       url:"https://yuanbao.tencent.com/chat/" },
+      { name:"通义千问",      desc:"阿里推出的AI全能助手",         icon:"https://aigcmax.com/uploads/icons/www.tongyi.com.png",             url:"https://www.tongyi.com/" },
+      { name:"Minimax",      desc:"通用智能体平台Manus平替",      icon:"https://aigcmax.com/uploads/icons/agent.minimaxi.com.png",         url:"https://agent.minimaxi.com/" },
+      { name:"纳米AI",        desc:"360推出通用智能体平台",        icon:"https://aigcmax.com/uploads/icons/bot.n.cn.svg",                   url:"https://bot.n.cn/" },
+      { name:"智谱清言",      desc:"智谱推出的AI全能助手",         icon:"https://aigcmax.com/uploads/icons/chatglm.cn.ico",                 url:"https://chatglm.cn/" },
+      { name:"文心一言",      desc:"百度推出的AI全能助手",         icon:"https://aigcmax.com/uploads/icons/yiyan.baidu.com.ico",            url:"https://yiyan.baidu.com/" },
+      { name:"秘塔AI",        desc:"没有广告的AI搜索引擎",         icon:"https://aigcmax.com/uploads/icons/metaso.cn.png",                  url:"https://metaso.cn/" },
+      { name:"天工AI",        desc:"昆仑万维推出的全能AI助手",     icon:"https://aigcmax.com/uploads/icons/upload_1771383660750.webp",       url:"https://www.tiangong.cn/" },
+      { name:"讯飞星火",      desc:"科大讯飞推出的AI全能助手",     icon:"https://aigcmax.com/uploads/icons/upload_1771383703506.webp",       url:"https://xinghuo.xfyun.cn/" },
+      { name:"ChatGPT",      desc:"OpenAI推出的大语言模型",       icon:"https://aigcmax.com/uploads/icons/upload_1771383758524.webp",       url:"https://www.chatgpt.com/" },
+      { name:"Gemini",       desc:"谷歌推出的大语言模型",          icon:"https://aigcmax.com/uploads/icons/upload_1771383873555.webp",       url:"https://gemini.google.com/app" },
+      { name:"Claude",       desc:"Anthropic推出的大语言模型",    icon:"https://aigcmax.com/uploads/icons/upload_1771383927769.webp",       url:"https://claude.ai/" },
+      { name:"Grok",         desc:"马斯克推出的大语言模型",        icon:"https://aigcmax.com/uploads/icons/upload_1771383804411.webp",       url:"https://x.ai/" },
+    ]
+  },
+  {
+    id: "ai-art",
+    icon: "🎨",
+    name: "AI 绘画设计",
+    tools: [
+      { name:"即梦AI",       desc:"抖音旗下AI图像视频创作工具",   icon:"https://aigcmax.com/uploads/icons/jimeng.jianying.com.ico",        url:"https://jimeng.jianying.com/ai-tool/home/" },
+      { name:"可灵AI",       desc:"快手旗下AI图像视频创作工具",   icon:"https://aigcmax.com/uploads/icons/klingai.kuaishou.com.ico",       url:"https://klingai.kuaishou.com/" },
+      { name:"通义万相",     desc:"阿里旗下AI创意作画平台",        icon:"https://aigcmax.com/uploads/icons/tongyi.aliyun.com.ico",          url:"https://tongyi.aliyun.com/wan/explore" },
+      { name:"MX绘画中文站", desc:"集成国内外所有AI绘画/视频模型", icon:"https://aigcmax.com/uploads/icons/www.mxai.cn.png",               url:"https://www.mxai.cn/home/#/mj", rec:true },
+      { name:"Liblib哩布哩布",desc:"基于SD的AI绘画平台",          icon:"https://aigcmax.com/uploads/icons/www.liblib.art.ico",             url:"https://www.liblib.art/" },
+      { name:"星流",         desc:"Liblib旗下设计智能体",          icon:"https://aigcmax.com/uploads/icons/www.xingliu.art.ico",            url:"https://www.xingliu.art/" },
+      { name:"无界AI",       desc:"可以反推提示词的AI绘画工具",    icon:"https://aigcmax.com/uploads/icons/www.wujieai.com.ico",            url:"https://www.wujieai.com/ai" },
+      { name:"腾讯混元3D",   desc:"一站式3D内容AI创作平台",        icon:"https://aigcmax.com/uploads/icons/3d.hunyuan.tencent.com.ico",     url:"https://3d.hunyuan.tencent.com/" },
+      { name:"商汤秒画",     desc:"免费的AI图片生成平台",          icon:"https://aigcmax.com/uploads/icons/miaohua.sensetime.com.png",      url:"https://miaohua.sensetime.com/" },
+      { name:"美图设计室",   desc:"美图推出的AI图像创作和处理平台", icon:"https://aigcmax.com/uploads/icons/www.designkit.com.png",         url:"https://www.designkit.com/" },
+      { name:"WHEE",         desc:"美图推出的高品质AI素材生成平台", icon:"https://aigcmax.com/uploads/icons/www.whee.com.ico",              url:"https://www.whee.com/" },
+      { name:"美间创意商拍", desc:"AI电商图设计和处理",            icon:"https://aigcmax.com/uploads/icons/www.meijian.com.ico",            url:"https://www.meijian.com/e-commerce" },
+      { name:"绘蛙",         desc:"AI电商图片处理工具",            icon:"https://aigcmax.com/uploads/icons/www.ihuiwa.com.png",             url:"https://www.ihuiwa.com/" },
+      { name:"PhotoStudio AI",desc:"AI模特换衣和电商图生成",       icon:"https://aigcmax.com/uploads/icons/psai.cn.png",                    url:"https://psai.cn/" },
+      { name:"老照片修复",   desc:"老照片修复和上色工具",          icon:"https://aigcmax.com/uploads/icons/imgupscaler.ai.webp",            url:"https://imgupscaler.ai/zh/old-photo-restoration/" },
+      { name:"可图AI试衣",   desc:"免费的AI换衣工具",             icon:"https://aigcmax.com/uploads/icons/modelscope.cn.ico",              url:"https://modelscope.cn/studios/Kwai-Kolors/Kolors-Virtual-Try-On" },
+      { name:"360智图",      desc:"一键抠图、去水印、去背景、画质增强", icon:"https://aigcmax.com/uploads/icons/pic.360.com.png",           url:"https://pic.360.com/home" },
+      { name:"一键抠图",     desc:"一键抠图、换背景、图片压缩",    icon:"https://aigcmax.com/uploads/icons/www.yijiankoutu.com.ico",        url:"https://www.yijiankoutu.com/" },
+      { name:"一键擦除",     desc:"一键擦除、去水印",              icon:"https://aigcmax.com/uploads/icons/magicstudio.com.png",            url:"https://magicstudio.com/zh/magiceraser/" },
+      { name:"搞定设计",     desc:"一站式在线平面设计平台",         icon:"https://aigcmax.com/uploads/icons/www.gaoding.com.ico",            url:"https://www.gaoding.com/" },
+      { name:"Canva可画",    desc:"一站式在线平面设计平台",         icon:null,                                                               url:"https://www.canva.cn/", emoji:"🎨" },
+      { name:"AI设计工坊",   desc:"一站式学习/创作/分享/接单平台",  icon:"https://aigcmax.com/uploads/icons/ke.study.163.com.ico",          url:"https://ke.study.163.com/artWorks/painting" },
+      { name:"百度图片",     desc:"一键去水印、变清晰、AI生图",     icon:"https://aigcmax.com/uploads/icons/image.baidu.com.ico",            url:"https://image.baidu.com/" },
+    ]
+  },
+  {
+    id: "ai-video",
+    icon: "🎬",
+    name: "AI 视频生成",
+    tools: [
+      { name:"即梦AI",       desc:"抖音旗下AI图像视频创作工具",   icon:"https://aigcmax.com/uploads/icons/jimeng.jianying.com.ico",        url:"https://jimeng.jianying.com/ai-tool/home/" },
+      { name:"可灵AI",       desc:"快手旗下AI图像视频创作工具",   icon:"https://aigcmax.com/uploads/icons/klingai.kuaishou.com.ico",       url:"https://klingai.kuaishou.com/" },
+      { name:"通义万相",     desc:"阿里推出的AI视频创作平台",      icon:"https://aigcmax.com/uploads/icons/tongyi.aliyun.com.ico",          url:"https://tongyi.aliyun.com/wanxiang/videoCreation" },
+      { name:"海螺视频",     desc:"Minimax推出的AI视频创作平台",  icon:"https://aigcmax.com/uploads/icons/hailuoai.com.png",               url:"https://hailuoai.com/video" },
+      { name:"Vidu AI",      desc:"生成高质量的动漫/广告/影视内容", icon:"https://aigcmax.com/uploads/icons/www.vidu.cn.svg",              url:"https://www.vidu.cn/" },
+      { name:"星火绘镜",     desc:"科大讯飞推出的AI短视频创作平台", icon:"https://aigcmax.com/uploads/icons/typemovie.art.ico",             url:"https://typemovie.art/" },
+      { name:"腾讯混元AI视频",desc:"腾讯旗下免费AI视频工具",       icon:"https://aigcmax.com/uploads/icons/video.hunyuan.tencent.com.png",  url:"https://video.hunyuan.tencent.com/" },
+      { name:"阿里视频重绘", desc:"AI人像视频多风格漫画",          icon:"https://aigcmax.com/uploads/icons/modelscope.cn.ico",              url:"https://modelscope.cn/studios/iic/multi-style_portrait_video_stylization/summary" },
+      { name:"绘想",         desc:"百度推出的AI视频创作平台",      icon:"https://aigcmax.com/uploads/icons/huixiang.baidu.com.ico",         url:"https://huixiang.baidu.com/" },
+      { name:"度加",         desc:"百度推出的一键成片创作平台",     icon:"https://aigcmax.com/uploads/icons/aigc.baidu.com.ico",             url:"https://aigc.baidu.com/welcome" },
+      { name:"即创",         desc:"抖音为商家推出的AI视频创作平台", icon:"https://aigcmax.com/uploads/icons/aic.oceanengine.com.svg",        url:"https://aic.oceanengine.com/login" },
+      { name:"Runway",       desc:"国外AI视频生成平台元老",         icon:"https://aigcmax.com/uploads/icons/app.runwayml.com.ico",           url:"https://app.runwayml.com/login" },
+      { name:"Sora 2",       desc:"OpenAI推出的视频生成大模型",    icon:"https://aigcmax.com/uploads/icons/upload_1771643481649.webp",       url:"https://sora.chatgpt.com/" },
+      { name:"Medeo",        desc:"国外AI视频生成平台",             icon:"https://aigcmax.com/uploads/icons/ai.medeo.app.png",               url:"https://ai.medeo.app/create" },
+      { name:"LibTV",        desc:"LibLib旗下全模态创作平台",       icon:"https://aigcmax.com/uploads/icons/www.liblib.tv.ico",              url:"https://www.liblib.tv/" },
+    ]
+  },
+  {
+    id: "ai-animation",
+    icon: "📺",
+    name: "AI 动画漫剧",
+    tools: [
+      { name:"SekoAI",       desc:"漫剧/剧本/分镜创作智能体",       icon:"https://aigcmax.com/uploads/icons/seko.sensetime.com.svg",         url:"https://seko.sensetime.com/" },
+      { name:"oiioii",       desc:"一句话做动漫智能体",              icon:"https://aigcmax.com/uploads/icons/www.oiioii.ai.ico",              url:"https://www.oiioii.ai/home" },
+      { name:"白日梦",        desc:"最长可生成六分钟视频的AI工具",   icon:"https://aigcmax.com/uploads/icons/aibrm.com.png",                  url:"https://aibrm.com/" },
+      { name:"巨日禄",        desc:"专业的AI短剧生产工具",            icon:"https://aigcmax.com/uploads/icons/video.jurilu.com.ico",           url:"https://video.jurilu.com/index" },
+      { name:"阿贝智能",      desc:"AI创作儿童有声绘本",              icon:"https://aigcmax.com/uploads/icons/abeiai.com.ico",                  url:"https://abeiai.com/" },
+      { name:"智绘星辰",      desc:"一键生成AI漫画推文神器",          icon:"https://aigcmax.com/uploads/icons/ai.jurilu.com.ico",              url:"https://ai.jurilu.com/" },
+      { name:"造梦阁AI",      desc:"一键生成小说推文视频",            icon:"https://aigcmax.com/uploads/icons/www.zaomengge.com.png",          url:"https://www.zaomengge.com/" },
+      { name:"OneStory",     desc:"AI故事生成助手",                  icon:"https://aigcmax.com/uploads/icons/onestory.art.ico",               url:"https://onestory.art/dashboard" },
+      { name:"万彩动画大师",  desc:"在电脑上制作沙雕动画",            icon:"https://aigcmax.com/uploads/icons/www.animiz.cn.ico",              url:"https://www.animiz.cn/" },
+      { name:"众影AI",        desc:"在手机上制作沙雕动画",            icon:"https://aigcmax.com/uploads/icons/m.zy.tensorbay.cn.ico",          url:"https://m.zy.tensorbay.cn/" },
+      { name:"Story",        desc:"国外AI故事短剧生成平台",           icon:null,                                                               url:"https://www.story.com/", emoji:"📺" },
+      { name:"SkyReels",     desc:"国外AI短剧创作平台",               icon:"https://aigcmax.com/uploads/icons/www.skyreels.ai.png",            url:"https://www.skyreels.ai/home" },
+    ]
+  },
+  {
+    id: "ai-audio",
+    icon: "🎵",
+    name: "AI 音频生成",
+    tools: [
+      { name:"Minimax语音",  desc:"声音克隆、文本转语音、音乐创作",  icon:"https://aigcmax.com/uploads/icons/www.minimaxi.com.ico",           url:"https://www.minimaxi.com/audio" },
+      { name:"Suno中文站",   desc:"AI音乐创作，Suno的国产版",        icon:null,                                                               url:"https://www.suno.cn/", emoji:"🎵" },
+      { name:"网易天音",     desc:"网易推出的一站式AI音乐创作工具",   icon:"https://aigcmax.com/uploads/icons/tianyin.music.163.com.ico",      url:"https://tianyin.music.163.com/" },
+      { name:"海绵音乐",     desc:"字节推出的免费AI音乐创作平台",     icon:"https://aigcmax.com/uploads/icons/www.haimian.com.png",            url:"https://www.haimian.com/" },
+      { name:"魔音工坊",     desc:"全面的一站式AI配音工具",           icon:"https://aigcmax.com/uploads/icons/www.moyin.com.ico",              url:"https://www.moyin.com/" },
+      { name:"海豚Ai",       desc:"支持真人和二次元音色的配音工具",   icon:"https://aigcmax.com/uploads/icons/upload_1771767810713.webp",       url:"https://www.ttson.cn/" },
+      { name:"音剪",         desc:"喜马拉雅旗下一站式AI音频创作",     icon:"https://aigcmax.com/uploads/icons/audioeditor.ximalaya.com.ico",   url:"https://audioeditor.ximalaya.com/" },
+      { name:"琅琅配音",     desc:"卓越的智能文本转语音工具",          icon:"https://aigcmax.com/uploads/icons/lang123.top.png",               url:"https://lang123.top/" },
+      { name:"Fish Audio",   desc:"国外的声音克隆、配音平台",          icon:"https://aigcmax.com/uploads/icons/fish.audio.ico",                 url:"https://fish.audio/zh-CN/" },
+      { name:"Mureka",       desc:"国外的AI音乐创作平台",              icon:"https://aigcmax.com/uploads/icons/www.mureka.ai.ico",              url:"https://www.mureka.ai/" },
+      { name:"Weights",      desc:"国外的AI创作音乐、人声翻唱平台",    icon:"https://aigcmax.com/uploads/icons/www.weights.com.ico",            url:"https://www.weights.com/zh/train/voice" },
+    ]
+  },
+  {
+    id: "ai-office",
+    icon: "💼",
+    name: "AI 办公提效",
+    tools: [
+      { name:"通义千问",     desc:"AI制作PPT、阅读助手等效率工具",   icon:"https://aigcmax.com/uploads/icons/www.tongyi.com.png",             url:"https://www.tongyi.com/" },
+      { name:"通义听悟",     desc:"AI会议纪要、音视频内容分析",       icon:"https://aigcmax.com/uploads/icons/tingwu.aliyun.com.png",          url:"https://tingwu.aliyun.com/home" },
+      { name:"AI生成PPT",    desc:"一句话，一分钟，一键生成PPT",      icon:"https://aigcmax.com/uploads/icons/upload_1776928421981.webp",       url:"https://www.aippt.cn/" },
+      { name:"百度文库",     desc:"AI制作PPT、图表、文档",            icon:"https://aigcmax.com/uploads/icons/wenku.baidu.com.ico",             url:"https://wenku.baidu.com/" },
+      { name:"WPS AI",       desc:"WPS推出的AI全能办公助手",          icon:"https://aigcmax.com/uploads/icons/ai.wps.cn.ico",                  url:"https://ai.wps.cn/" },
+      { name:"飞书妙记",     desc:"飞书推出的会议记录AI工具",          icon:"https://aigcmax.com/uploads/icons/www.feishu.cn.png",              url:"https://www.feishu.cn/product/minutes" },
+      { name:"博思白板",     desc:"在线白板、AI思维导图",              icon:"https://aigcmax.com/uploads/icons/boardmix.cn.ico",                url:"https://boardmix.cn/" },
+      { name:"TreeMind树图", desc:"新一代在线思维导图",                icon:"https://aigcmax.com/uploads/icons/shutu.cn.ico",                   url:"https://shutu.cn/" },
+      { name:"职得AI简历",   desc:"简历一键排版，在线设计简历",         icon:"https://aigcmax.com/uploads/icons/www.zdjianli.cn.ico",            url:"https://www.zdjianli.cn/" },
+      { name:"论文写作",     desc:"在线一键生成毕业论文",              icon:"https://aigcmax.com/uploads/icons/www.66paper.cn.png",             url:"https://www.66paper.cn/" },
+      { name:"稿易AI",       desc:"AI原创论文写作平台",                icon:"https://aigcmax.com/uploads/icons/gaoyiai.com.jpg",                url:"https://gaoyiai.com/" },
+    ]
+  },
+  {
+    id: "ai-agent",
+    icon: "🤖",
+    name: "AI 智能体",
+    tools: [
+      { name:"扣子",         desc:"字节旗下通用智能体平台",           icon:"https://aigcmax.com/uploads/icons/upload_1771351524512.png",        url:"https://coze.cn/", rec:true },
+      { name:"扣子Coze",     desc:"字节旗下智能体开发平台",           icon:"https://aigcmax.com/uploads/icons/www.coze.cn.png",               url:"https://www.coze.cn/home" },
+      { name:"Minimax智能体",desc:"Minimax旗下通用智能体平台",        icon:"https://aigcmax.com/uploads/icons/agent.minimaxi.com.png",         url:"https://agent.minimaxi.com/" },
+      { name:"纳米AI智能体", desc:"360旗下通用智能体平台",             icon:"https://aigcmax.com/uploads/icons/bot.n.cn.svg",                   url:"https://bot.n.cn/" },
+      { name:"Lovart",       desc:"图像视频创作智能体平台",            icon:"https://aigcmax.com/uploads/icons/www.lovart.ai.ico",              url:"https://www.lovart.ai/" },
+      { name:"码上飞",        desc:"用一句话开发应用",                  icon:"https://aigcmax.com/uploads/icons/www.codeflying.net.ico",         url:"https://www.codeflying.net/" },
+      { name:"UXbot",        desc:"AI生成网站与视觉设计",              icon:"https://aigcmax.com/uploads/icons/upload_1771767798690.webp",       url:"https://www.uxbot.cn/" },
+      { name:"Accio",        desc:"阿里旗下B2B采购智能体平台",         icon:"https://aigcmax.com/uploads/icons/www.accio.com.png",              url:"https://www.accio.com/" },
+      { name:"智谱智能体",   desc:"智谱清言旗下智能体平台",            icon:"https://aigcmax.com/uploads/icons/chatglm.cn.ico",                 url:"https://chatglm.cn/main/toolsCenter" },
+      { name:"文心智能体",   desc:"百度旗下智能体平台",                icon:"https://aigcmax.com/uploads/icons/agents.baidu.com.ico",           url:"https://agents.baidu.com/center" },
+      { name:"阿里云百炼",   desc:"阿里旗下智能体开发平台",            icon:"https://aigcmax.com/uploads/icons/bailian.console.aliyun.com.ico", url:"https://bailian.console.aliyun.com/" },
+    ]
+  },
+  {
+    id: "ai-avatar",
+    icon: "👤",
+    name: "AI 数字人",
+    tools: [
+      { name:"蝉镜",         desc:"国内头部数字人制作平台",            icon:"https://aigcmax.com/uploads/icons/www.chanjing.cc.ico",            url:"https://www.chanjing.cc/" },
+      { name:"飞影",         desc:"国内头部数字人制作平台",            icon:"https://aigcmax.com/uploads/icons/hifly.cc.ico",                  url:"https://hifly.cc/" },
+      { name:"闪剪",         desc:"AI数字人视频在线创作平台",          icon:"https://aigcmax.com/uploads/icons/shanjian.tv.ico",               url:"https://shanjian.tv/" },
+      { name:"万兴播爆",     desc:"AI数字人口播视频营销工具",          icon:"https://aigcmax.com/uploads/icons/virbo.wondershare.cn.ico",       url:"https://virbo.wondershare.cn/app/" },
+      { name:"剪映数字人",   desc:"剪映旗下数字人功能",                icon:"https://aigcmax.com/uploads/icons/www.jianying.com.ico",           url:"https://www.jianying.com/ai-creator/start" },
+      { name:"万彩AI",       desc:"AI数字人制作、口播视频制作",        icon:"https://aigcmax.com/uploads/icons/ai.kezhan365.com.ico",           url:"https://ai.kezhan365.com/" },
+      { name:"有言AI",       desc:"一键生成逼真的3D数字人视频",         icon:"https://aigcmax.com/uploads/icons/www.youyan3d.com.ico",           url:"https://www.youyan3d.com/" },
+      { name:"即构数智人",   desc:"AI数字人视频创作平台",              icon:"https://aigcmax.com/uploads/icons/aigc.zego.im.ico",               url:"https://aigc.zego.im/" },
+      { name:"曦灵数字人平台",desc:"实现数字人资产一站式管理",          icon:"https://aigcmax.com/uploads/icons/xiling.cloud.baidu.com.ico",     url:"https://xiling.cloud.baidu.com/" },
+      { name:"Heygen",       desc:"国外最强AI数字人平台",               icon:"https://aigcmax.com/uploads/icons/www.heygen.com.ico",             url:"https://www.heygen.com/" },
+      { name:"KreadoAI",     desc:"AI数字人视频营销创作平台",           icon:"https://aigcmax.com/uploads/icons/www.kreadoai.com.png",           url:"https://www.kreadoai.com/" },
+      { name:"ViggleAI",     desc:"AI生成角色动态视频的工具",           icon:"https://aigcmax.com/uploads/icons/viggle.ai.ico",                  url:"https://viggle.ai/home" },
+    ]
+  },
+  {
+    id: "ai-interior",
+    icon: "🏠",
+    name: "AI 室内设计",
+    tools: [
+      { name:"酷家乐",       desc:"高效的全场景3D渲染出图工具",        icon:"https://aigcmax.com/uploads/icons/www.kujiale.com.ico",            url:"https://www.kujiale.com/" },
+      { name:"Coohom",       desc:"10分钟内创建3D室内设计",            icon:"https://aigcmax.com/uploads/icons/www.coohom.com.ico",             url:"https://www.coohom.com/" },
+      { name:"Collov AI",    desc:"AI室内家居设计生成平台",             icon:"https://aigcmax.com/uploads/icons/collov.cn.ico",                  url:"https://collov.cn/" },
+      { name:"Floorpanner",  desc:"高效展示平面图和3D可视化",           icon:"https://aigcmax.com/uploads/icons/upload_1771767838208.webp",       url:"https://floorplanner.com/zh" },
+      { name:"Planner5D",    desc:"一站式AI家居设计平台",               icon:"https://aigcmax.com/uploads/icons/planner5d.com.ico",              url:"https://planner5d.com/dashboard" },
+      { name:"建筑学长",     desc:"千万建筑师的资源库和AI绘图创作平台", icon:"https://aigcmax.com/uploads/icons/www.jianzhuxuezhang.com.ico",    url:"https://www.jianzhuxuezhang.com/" },
+    ]
+  },
+  {
+    id: "ai-prompt",
+    icon: "📝",
+    name: "AI 提示词库",
+    tools: [
+      { name:"提示词合集",   desc:"精选最高效的AI提示词库",            icon:"https://aigcmax.com/uploads/icons/www.waytoagi.com.ico",           url:"https://www.waytoagi.com/zh/prompts" },
+      { name:"Deepseek官方提示词",desc:"Deepseek官网开源的提示词库",   icon:"https://aigcmax.com/uploads/icons/upload_1771643600232.webp",       url:"https://api-docs.deepseek.com/zh-cn/prompt-library/" },
+      { name:"OpenNana提示词图库",desc:"Nano Banana Pro 生图提示词",   icon:"https://aigcmax.com/uploads/icons/opennana.com.ico",               url:"https://opennana.com/awesome-prompt-gallery/" },
+    ]
+  },
+  {
+    id: "tools",
+    icon: "🔧",
+    name: "常用小工具",
+    tools: [
+      { name:"一键下载视频", desc:"下载抖音、视频号等平台高清视频",    icon:"https://aigcmax.com/uploads/icons/xiazaishipin.com.ico",           url:"http://xiazaishipin.com/", rec:true },
+      { name:"Typeless",     desc:"全球领先的AI语音输入法",            icon:"https://aigcmax.com/uploads/icons/upload_1771909074021.webp",       url:"https://www.typeless.com/" },
+    ]
+  }
+];
+
+// ====================================================
+//  渲染逻辑
+// ====================================================
+
+// 渲染工具卡片
+function createToolCard(tool) {
+  const card = document.createElement('a');
+  card.className = 'tool-card';
+  card.href = tool.url;
+  card.target = '_blank';
+  card.rel = 'noopener noreferrer';
+
+  if (tool.rec) {
+    const badge = document.createElement('span');
+    badge.className = 'rec-badge';
+    badge.textContent = '推荐';
+    card.appendChild(badge);
+  }
+
+  // 图标
+  if (tool.icon) {
+    const img = document.createElement('img');
+    img.className = 'tool-icon';
+    img.src = tool.icon;
+    img.alt = tool.name;
+    img.loading = 'lazy';
+    img.onerror = function() {
+      this.replaceWith(createEmojiIcon(tool.emoji || tool.name[0]));
+    };
+    card.appendChild(img);
+  } else {
+    card.appendChild(createEmojiIcon(tool.emoji || tool.name[0]));
+  }
+
+  const name = document.createElement('div');
+  name.className = 'tool-name';
+  name.textContent = tool.name;
+  card.appendChild(name);
+
+  const desc = document.createElement('div');
+  desc.className = 'tool-desc';
+  desc.textContent = tool.desc;
+  card.appendChild(desc);
+
+  const btn = document.createElement('span');
+  btn.className = 'visit-btn';
+  btn.innerHTML = '立即体验 →';
+  card.appendChild(btn);
+
+  return card;
+}
+
+function createEmojiIcon(char) {
+  const div = document.createElement('div');
+  div.className = 'tool-icon-placeholder';
+  div.textContent = char;
+  return div;
+}
+
+// 渲染置顶精选
+function renderFeatured() {
+  const grid = document.getElementById('featuredGrid');
+  FEATURED.forEach(tool => grid.appendChild(createToolCard(tool)));
+}
+
+// 渲染侧边栏
+function renderSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  CATEGORIES.forEach(cat => {
+    const a = document.createElement('a');
+    a.href = '#' + cat.id;
+    a.innerHTML = `<span>${cat.icon}</span><span>${cat.name}</span><span class="count">${cat.tools.length}</span>`;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('.sidebar-nav a').forEach(el => el.classList.remove('active'));
+      a.classList.add('active');
+      const section = document.getElementById(cat.id);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        section.classList.add('highlight-flash');
+        setTimeout(() => section.classList.remove('highlight-flash'), 1500);
+      }
+    });
+    nav.appendChild(a);
+  });
+}
+
+// 渲染所有分类
+function renderCategories() {
+  const container = document.getElementById('categoriesContainer');
+  CATEGORIES.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'category-section';
+    section.id = cat.id;
+
+    const header = document.createElement('div');
+    header.className = 'category-header';
+    header.innerHTML = `
+      <span style="font-size:22px;">${cat.icon}</span>
+      <h2 class="category-title">${cat.name}</h2>
+      <span class="category-count">${cat.tools.length} 个工具</span>
+    `;
+    section.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'tools-grid';
+    cat.tools.forEach(tool => grid.appendChild(createToolCard(tool)));
+    section.appendChild(grid);
+
+    container.appendChild(section);
+  });
+}
+
+// ====================================================
+//  搜索功能
+// ====================================================
+const allTools = CATEGORIES.flatMap(cat =>
+  cat.tools.map(t => ({ ...t, catName: cat.name, catIcon: cat.icon }))
+);
+
+function doSearch(query) {
+  const q = query.trim().toLowerCase();
+  const searchResults = document.getElementById('searchResults');
+  const categoriesContainer = document.getElementById('categoriesContainer');
+  const featuredSection = document.querySelector('.featured-section');
+
+  if (!q) {
+    searchResults.style.display = 'none';
+    categoriesContainer.style.display = '';
+    featuredSection.style.display = '';
+    return;
+  }
+
+  featuredSection.style.display = 'none';
+  categoriesContainer.style.display = 'none';
+  searchResults.style.display = '';
+  searchResults.innerHTML = '';
+
+  const matched = allTools.filter(t =>
+    t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+  );
+
+  const title = document.createElement('div');
+  title.className = 'search-results-title';
+  title.innerHTML = `搜索 "<span>${query}</span>" 共找到 ${matched.length} 个工具`;
+  searchResults.appendChild(title);
+
+  if (matched.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'no-results';
+    empty.innerHTML = '😕 没有找到相关工具，换个关键词试试？';
+    searchResults.appendChild(empty);
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'tools-grid';
+  matched.forEach(tool => grid.appendChild(createToolCard(tool)));
+  searchResults.appendChild(grid);
+}
+
+// ====================================================
+//  初始化
+// ====================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderFeatured();
+  renderSidebar();
+  renderCategories();
+
+  // 置顶推荐折叠
+  const toggleBtn = document.getElementById('featuredToggle');
+  const featuredGrid = document.getElementById('featuredGrid');
+  toggleBtn.addEventListener('click', () => {
+    const collapsed = featuredGrid.classList.toggle('collapsed');
+    toggleBtn.textContent = collapsed ? '展开' : '收起';
+  });
+
+  // 搜索
+  const searchInput = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('clearBtn');
+  let searchTimer;
+
+  searchInput.addEventListener('input', () => {
+    clearBtn.style.display = searchInput.value ? 'block' : 'none';
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => doSearch(searchInput.value), 200);
+  });
+
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    doSearch('');
+    searchInput.focus();
+  });
+
+  // 滚动监听侧边栏高亮
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.sidebar-nav a').forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-80px 0px -60% 0px' });
+
+  CATEGORIES.forEach(cat => {
+    const el = document.getElementById(cat.id);
+    if (el) observer.observe(el);
+  });
+});
+</script>
+
+</body>
+</html>
